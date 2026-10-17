@@ -1,0 +1,821 @@
+@import "tailwindcss";
+
+/*
+ * "Blue Hour": a spatial theme. The city seen just after sunset. A deep lagoon-teal sky
+ * holds the last amber glow on the horizon (teal and amber are complements, so the two
+ * never fight), and glass windows float in front of the skyline the way visionOS panels
+ * float in a room. Coral and lilac are kept as sparing accents. Text colours are tuned
+ * for at least AA contrast on the darkest and lightest glass.
+ */
+:root {
+  --night: #021219;
+  --bg: rgb(1 14 20 / 0.55);
+  --card: rgb(18 50 60 / 0.42);
+  --card-strong: rgb(12 38 48 / 0.74);
+  --ink: #eef8f6;
+  --muted: #9fbfbc;
+  --line: rgb(210 255 245 / 0.12);
+  --navy: #0e7c74;
+  --navy-soft: rgb(94 242 214 / 0.1);
+  --glow: #6ff0d8;
+  --accent: #ffc56e;
+  --accent-solid: #b45309;
+  --accent-soft: rgb(255 197 110 / 0.12);
+  --coral: #ff8f7a;
+  --lilac: #c9b8ff;
+  --support: #86efac;
+  --support-solid: #15803d;
+  --oppose: #ff8f7a;
+  --oppose-solid: #b91c1c;
+  --question: #c9b8ff;
+  --question-solid: #6d28d9;
+  --t-housing: #ffb39e;
+  --t-transit: #82cfff;
+  --t-streets: #6ff0d8;
+  --t-parks: #a3e9a0;
+  --t-safety: #ffd57a;
+  --t-environment: #cfe97a;
+  --t-budget: #dcc6ff;
+  --ease-spatial: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-night: var(--night);
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-navy: var(--navy);
+  --color-navy-soft: var(--navy-soft);
+  --color-glow: var(--glow);
+  --color-accent: var(--accent);
+  --color-accent-solid: var(--accent-solid);
+  --color-accent-soft: var(--accent-soft);
+  --color-coral: var(--coral);
+  --color-lilac: var(--lilac);
+  --color-support: var(--support);
+  --color-support-solid: var(--support-solid);
+  --color-oppose: var(--oppose);
+  --color-oppose-solid: var(--oppose-solid);
+  --color-question: var(--question);
+  --color-question-solid: var(--question-solid);
+  --font-sans: var(--font-public), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-instrument), Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ease-spatial: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body {
+  background: var(--night);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.55;
+  min-height: 100dvh;
+  overflow-x: clip;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+::selection {
+  background: rgb(111 240 216 / 0.35);
+}
+
+.official {
+  font-family: "Times New Roman", Times, Georgia, serif;
+  letter-spacing: -0.005em;
+}
+
+/* ---------- Spatial surfaces ---------- */
+
+@layer components {
+  /* Glass catches light from the top-left, like a pane hanging in front of the sky. */
+  .glass {
+    background:
+      linear-gradient(155deg, rgb(255 255 255 / 0.09), rgb(255 255 255 / 0.02) 38%, rgb(111 240 216 / 0.03)),
+      var(--card);
+    backdrop-filter: blur(28px) saturate(170%);
+    border: 1px solid var(--line);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      inset 1px 0 0 rgb(255 255 255 / 0.05),
+      inset 0 -12px 24px -18px rgb(111 240 216 / 0.25),
+      0 30px 60px -28px rgb(0 0 0 / 0.75),
+      0 50px 90px -60px rgb(111 240 216 / 0.3);
+  }
+  .glass-strong {
+    background:
+      linear-gradient(155deg, rgb(255 255 255 / 0.11), rgb(255 255 255 / 0.025) 42%, rgb(255 197 110 / 0.025)),
+      var(--card-strong);
+    backdrop-filter: blur(36px) saturate(180%);
+    border: 1px solid rgb(220 255 248 / 0.15);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.2),
+      inset 0 -16px 32px -24px rgb(255 197 110 / 0.25),
+      0 36px 90px -30px rgb(0 0 0 / 0.9),
+      0 60px 120px -70px rgb(111 240 216 / 0.35);
+  }
+  /* A warm lantern: the one colour that means "do something". */
+  .btn-ember {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(120deg, #ffd88a, #ffa877 55%, #ff8f8f);
+    color: #2a1204;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.6),
+      inset 0 -3px 8px rgb(170 60 20 / 0.25),
+      0 12px 32px -10px rgb(255 160 100 / 0.75);
+    transition: transform 0.35s var(--ease-spring), box-shadow 0.3s, filter 0.3s;
+  }
+  .btn-ember::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / 0.6) 50%, transparent 65%);
+    transform: translateX(-130%);
+    transition: transform 0.8s var(--ease-spatial);
+  }
+  .btn-ember:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.6),
+      inset 0 -3px 8px rgb(170 60 20 / 0.25),
+      0 18px 44px -10px rgb(255 160 100 / 0.95);
+  }
+  .btn-ember:hover::after {
+    transform: translateX(130%);
+  }
+  .btn-ember:active {
+    transform: scale(0.96);
+  }
+  .text-aurora {
+    background: linear-gradient(90deg, #6ff0d8, #ffe08a 30%, #ff9f80 55%, #c9b8ff 80%, #6ff0d8);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 9s linear infinite;
+  }
+  /* A slowly turning light around the edge of a panel. */
+  .halo {
+    position: relative;
+    isolation: isolate;
+  }
+  .halo::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--halo-angle, 0deg),
+      #6ff0d8,
+      transparent 18%,
+      #ffc56e 32%,
+      #ff8f7a 42%,
+      transparent 58%,
+      #c9b8ff 78%,
+      #6ff0d8
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: halo-spin 7s linear infinite;
+  }
+  /* visionOS "window bar": the little handle floating under a window. */
+  .grabber {
+    position: relative;
+  }
+  .grabber::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -18px;
+    width: 54px;
+    height: 5px;
+    border-radius: 9px;
+    background: rgb(230 255 250 / 0.22);
+    box-shadow: 0 0 12px rgb(111 240 216 / 0.25);
+    transform: translateX(-50%);
+    transition: width 0.4s var(--ease-spring), background 0.3s;
+    pointer-events: none;
+  }
+  .grabber:hover::after {
+    width: 76px;
+    background: rgb(230 255 250 / 0.45);
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+}
+
+@property --halo-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes halo-spin {
+  to { --halo-angle: 360deg; }
+}
+@keyframes shimmer {
+  to { background-position: 220% center; }
+}
+
+/* Pointer tilt: only for precise pointers, and only when motion is welcome. */
+/* Kept flat (no preserve-3d): backdrop blur doesn't render inside 3D rendering contexts. */
+.tilt {
+  transition: transform 0.6s var(--ease-spatial);
+}
+.tilt-glare {
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgb(255 255 255 / 0.13), transparent 45%);
+}
+/* A rim of light that follows the pointer around the edge of the glass. */
+.tilt-rim {
+  opacity: 0;
+  padding: 1.5px;
+  transition: opacity 0.4s;
+  background: radial-gradient(260px circle at var(--gx, 50%) var(--gy, 50%), rgb(111 240 216 / 0.9), rgb(255 197 110 / 0.5) 35%, transparent 65%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .tilt {
+    transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) scale(var(--lift, 1)) translateZ(0);
+  }
+  .tilt:hover {
+    --lift: 1.018;
+    transition: transform 0.18s linear;
+  }
+  .tilt:hover .tilt-glare,
+  .tilt:hover .tilt-rim {
+    opacity: 1;
+  }
+}
+
+/* ---------- The city at blue hour ---------- */
+
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(100px);
+}
+@keyframes drift-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(5vw, 3vh) scale(1.12); }
+}
+@keyframes drift-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-6vw, 5vh) scale(0.9); }
+}
+.orb-a { animation: drift-a 26s ease-in-out infinite; }
+.orb-b { animation: drift-b 32s ease-in-out infinite; }
+
+.parallax {
+  will-change: transform;
+  transition: transform 0.9s var(--ease-spatial);
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+.twinkle {
+  animation: twinkle 3.5s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.spin-slow { animation: spin 140s linear infinite; }
+.spin-rev { animation: spin 90s linear infinite reverse; }
+
+/* Dust and fireflies drifting up through the light. */
+@keyframes mote {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  10% { opacity: 1; }
+  50% { transform: translate3d(3vw, -50vh, 0); }
+  90% { opacity: 0.8; }
+  100% { transform: translate3d(-2vw, -100vh, 0); opacity: 0; }
+}
+.mote {
+  position: absolute;
+  bottom: -10px;
+  border-radius: 9999px;
+  animation: mote linear infinite;
+}
+
+/* The pointer is a soft light, the way gaze highlights things in a headset. */
+.gaze {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 720px;
+  height: 720px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgb(111 240 216 / 0.16), rgb(255 197 110 / 0.05) 40%, transparent 70%);
+  transform: translate3d(calc(var(--mx, 70vw) - 50%), calc(var(--my, 20vh) - 50%), 0);
+  transition: transform 1.1s var(--ease-spatial);
+}
+
+/* ---------- Motion ---------- */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+.rise {
+  animation: rise 0.7s var(--ease-spatial) both;
+}
+
+/* Every route opens like a window: from slightly behind you, out of focus. */
+@keyframes window-open {
+  from { opacity: 0; transform: perspective(1200px) translateZ(-80px) translateY(12px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+.window-open {
+  animation: window-open 0.8s var(--ease-spatial) backwards;
+}
+
+/* Headline words lift into place one by one. */
+@keyframes word-in {
+  from { opacity: 0; transform: translateY(0.45em) rotateX(-70deg); filter: blur(10px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+.word {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  animation: word-in 0.9s var(--ease-spatial) both;
+  animation-delay: calc(var(--i, 0) * 55ms + 100ms);
+}
+
+/* Scroll reveal: only hidden once JS is ready to show it again (see Reveal.tsx). */
+[data-reveal] {
+  transition:
+    opacity 0.9s var(--ease-spatial),
+    transform 1s var(--ease-spatial),
+    translate 0.4s var(--ease-spatial),
+    background-color 0.3s;
+  transition-delay: var(--d, 0ms), var(--d, 0ms), 0ms, 0ms;
+}
+.js-reveal [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+  transform: perspective(1000px) translateY(40px) rotateX(10deg) scale(0.96);
+}
+
+/* Things that fill or count up wait until their panel is in view. */
+.grow-x {
+  transform-origin: left center;
+  transition: transform 1.2s var(--ease-spatial) 0.25s;
+}
+.grow-y {
+  transform-origin: top center;
+  transition: transform 0.9s var(--ease-spatial) calc(var(--d, 0ms) + 0.2s);
+}
+.js-reveal [data-reveal]:not([data-revealed]) .grow-x { transform: scaleX(0); }
+.js-reveal [data-reveal]:not([data-revealed]) .grow-y { transform: scaleY(0); }
+
+@keyframes dot-pop {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+.dot-pop {
+  animation: dot-pop 0.5s var(--ease-spring) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 0.3s);
+}
+.js-reveal [data-reveal]:not([data-revealed]) .dot-pop {
+  animation: none;
+  transform: scale(0);
+}
+
+/* Council-language switch turns each card over like a placard. */
+@keyframes flip-in {
+  from { opacity: 0; transform: perspective(800px) rotateY(-80deg); }
+  to { opacity: 1; transform: none; }
+}
+.flip-in {
+  animation: flip-in 0.6s var(--ease-spatial) both;
+  transform-origin: left center;
+  backface-visibility: hidden;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.pop {
+  animation: pop 0.55s var(--ease-spring) both;
+}
+/* Chips bounce when they're switched on. */
+[aria-pressed="true"].chip-pop {
+  animation: pop 0.45s var(--ease-spring);
+}
+
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(255 197 110 / 0); }
+  50% { box-shadow: 0 0 18px 0 rgb(255 197 110 / 0.45); }
+}
+.breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* The countdown ring draws itself in, and a light circles it. */
+@keyframes ring-draw {
+  from { stroke-dashoffset: var(--c); }
+}
+.ring-draw {
+  animation: ring-draw 1.8s var(--ease-spatial) 0.3s both;
+}
+.orbit {
+  transform-origin: 60px 60px;
+  animation: spin 6s linear infinite;
+}
+@keyframes ripple {
+  from { transform: scale(0.85); opacity: 0.6; }
+  to { transform: scale(1.5); opacity: 0; }
+}
+.ripple {
+  animation: ripple 3.2s var(--ease-spatial) infinite;
+}
+
+/* Live agenda ticker. */
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+.marquee {
+  animation: marquee 60s linear infinite;
+}
+.marquee-host:hover .marquee {
+  animation-play-state: paused;
+}
+
+/* A sent comment flies off into the distance, toward City Hall. */
+@keyframes send-away {
+  to { opacity: 0; transform: perspective(900px) translateZ(-500px) translateY(-80px) rotateX(22deg); filter: blur(4px); }
+}
+.send-away {
+  animation: send-away 0.6s cubic-bezier(0.5, 0, 0.75, 0) forwards;
+}
+
+/* ...and lands as a burst of light. */
+@keyframes burst {
+  0% { transform: rotate(var(--a)) translateX(0) scale(1.2); opacity: 1; }
+  100% { transform: rotate(var(--a)) translateX(var(--dist)) scale(0); opacity: 0; }
+}
+.burst {
+  animation: burst 1s var(--ease-spatial) both;
+  animation-delay: 0.15s;
+}
+@keyframes draw {
+  from { stroke-dashoffset: 30; }
+  to { stroke-dashoffset: 0; }
+}
+.draw {
+  stroke-dasharray: 30;
+  animation: draw 0.6s var(--ease-spatial) 0.35s both;
+}
+
+/* The lens in the logo catches a glint now and then. */
+@keyframes glint {
+  0%, 70% { transform: translateX(-24px) rotate(25deg); }
+  100% { transform: translateX(30px) rotate(25deg); }
+}
+.glint {
+  animation: glint 5s ease-in-out infinite;
+}
+
+/* ---------- Showcase features ---------- */
+
+/* Toasts float up from below and sink away. */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.9); filter: blur(4px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes toast-out {
+  to { opacity: 0; transform: translateY(12px) scale(0.95); }
+}
+.toast-in { animation: toast-in 0.5s var(--ease-spring) both; }
+.toast-out { animation: toast-out 0.4s var(--ease-spatial) both; }
+
+/* The ⌘K window springs forward out of the scene. */
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes fade-out { to { opacity: 0; } }
+.fade-in { animation: fade-in 0.3s ease both; }
+.fade-out { animation: fade-out 0.22s ease both; }
+@keyframes palette-in {
+  from { opacity: 0; transform: perspective(1000px) translateZ(-120px) translateY(-16px) rotateX(8deg); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes palette-out {
+  to { opacity: 0; transform: perspective(1000px) translateZ(-80px) translateY(-8px); }
+}
+.palette-in { animation: palette-in 0.55s var(--ease-spring) both; }
+.palette-out { animation: palette-out 0.22s ease-in both; }
+
+/* Quick take: the next card steps forward from the stack. */
+@keyframes step-forward {
+  from { transform: translateY(-18px) scale(0.94); opacity: 0.75; }
+  to { transform: none; opacity: 1; }
+}
+.step-forward { animation: step-forward 0.5s var(--ease-spring) backwards; }
+
+/* Council chamber: empty seats wait in a slow wave; the arc draws itself. */
+@keyframes seat-wave {
+  0%, 100% { transform: translateY(0); filter: drop-shadow(0 0 0 rgb(111 240 216 / 0)); }
+  50% { transform: translateY(-4px); filter: drop-shadow(0 0 10px rgb(111 240 216 / 0.6)); }
+}
+.seat-wave {
+  animation: seat-wave 3.2s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 180ms);
+}
+.arc-draw {
+  stroke-dasharray: 2 4;
+  animation: halo-dash 30s linear infinite;
+}
+@keyframes halo-dash { to { stroke-dashoffset: -120; } }
+
+/* Map pins bob and send out ripples; the river shimmers. */
+@keyframes pin-bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+.pin-bob { animation: pin-bob 2.6s ease-in-out infinite; }
+@keyframes pin-ripple {
+  from { transform: scale(0.4); opacity: 0.9; }
+  to { transform: scale(2.4); opacity: 0; }
+}
+.pin-ripple {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pin-ripple 2.4s var(--ease-spatial) infinite;
+}
+@keyframes river {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1; }
+}
+.river { animation: river 4s ease-in-out infinite; }
+
+/* Hero: a scroll cue that drips downward. */
+@keyframes scroll-cue {
+  0% { transform: translateY(-6px); opacity: 0; }
+  40% { opacity: 1; }
+  100% { transform: translateY(10px); opacity: 0; }
+}
+.scroll-cue { animation: scroll-cue 1.8s var(--ease-spatial) infinite; }
+
+/* A button that leans toward the pointer (see Magnetic.tsx). */
+.magnetic {
+  transform: translate(var(--mgx, 0px), var(--mgy, 0px));
+  transition: transform 0.5s var(--ease-spring);
+}
+
+/* ---------- Community: notice art, tickets and queues ---------- */
+
+/* Diya flames flicker; embers drift up; the marigold toran sways. */
+@keyframes flicker {
+  0%, 100% { transform: scale(1, 1) rotate(-2deg); opacity: 0.95; }
+  25% { transform: scale(0.92, 1.08) rotate(2deg); opacity: 1; }
+  50% { transform: scale(1.05, 0.94) rotate(-1deg); opacity: 0.85; }
+  75% { transform: scale(0.96, 1.05) rotate(1deg); opacity: 1; }
+}
+.flicker {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flicker 1.4s ease-in-out infinite;
+}
+@keyframes ember {
+  0% { transform: translate(0, 0) scale(1); opacity: 0; }
+  15% { opacity: 1; }
+  100% { transform: translate(var(--dx, 10px), -120px) scale(0.2); opacity: 0; }
+}
+.ember { animation: ember 3s ease-out infinite; }
+@keyframes sway {
+  0%, 100% { transform: rotate(-2.5deg); }
+  50% { transform: rotate(2.5deg); }
+}
+.sway {
+  transform-origin: 50% 0;
+  animation: sway 4s ease-in-out infinite;
+}
+
+/* Snow falls with a little drift; fairy lights blink in turn. */
+@keyframes snow {
+  from { transform: translate(0, -20px); }
+  to { transform: translate(var(--dx, 20px), 200px); }
+}
+.snow { animation: snow linear infinite; }
+@keyframes blink {
+  0%, 100% { opacity: 1; filter: brightness(1.3); }
+  50% { opacity: 0.25; filter: none; }
+}
+.blink { animation: blink 1.6s ease-in-out infinite; }
+
+/* Fireworks: a rocket climbs, then bursts. */
+@keyframes rocket {
+  0% { transform: translateY(120px); opacity: 0; }
+  10% { opacity: 1; }
+  45% { transform: translateY(0); opacity: 1; }
+  50%, 100% { transform: translateY(0); opacity: 0; }
+}
+.rocket { animation: rocket 2.8s var(--ease-spatial) infinite; }
+@keyframes spark {
+  0%, 45% { transform: rotate(var(--a)) translateX(0) scale(0); opacity: 0; }
+  50% { transform: rotate(var(--a)) translateX(0) scale(1.4); opacity: 1; }
+  100% { transform: rotate(var(--a)) translateX(var(--dist)) translateY(14px) scale(0.2); opacity: 0; }
+}
+.spark { animation: spark 2.8s cubic-bezier(0.1, 0.7, 0.3, 1) infinite; }
+
+/* A shuttlecock rallies across the court. */
+@keyframes rally {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+.rally {
+  offset-path: path("M 20 110 Q 180 -30 340 110 Q 180 -10 20 110");
+  offset-rotate: auto;
+  animation: rally 3.2s ease-in-out infinite;
+}
+
+/* Water notices: a rolling wave and falling drops. */
+@keyframes wave {
+  to { transform: translateX(-50%); }
+}
+.wave { animation: wave 6s linear infinite; }
+@keyframes drop {
+  0% { transform: translateY(-10px); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(90px); opacity: 0; }
+}
+.drop { animation: drop 1.8s ease-in infinite; }
+
+/* The tear-off date swings when you point at it. */
+@keyframes swing {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(6deg); }
+  60% { transform: rotate(-4deg); }
+}
+.group:hover .swing { animation: swing 0.9s var(--ease-spatial); }
+.swing { transform-origin: 50% 0; }
+
+/* A request number prints out of the service desk. */
+@keyframes print {
+  from { clip-path: inset(0 0 100% 0); transform: translateY(-24px); }
+  to { clip-path: inset(0 0 0 0); transform: none; }
+}
+.print { animation: print 1.1s var(--ease-spatial) 0.15s both; }
+/* An attached photo develops like an instant print: washed out and soft, then sharp. */
+@keyframes develop {
+  from { opacity: 0; filter: blur(12px) brightness(1.9) saturate(0); transform: translateY(10px) rotate(-5deg) scale(0.94); }
+  35% { opacity: 1; }
+  to { filter: none; transform: rotate(-2deg); }
+}
+.develop { animation: develop 1.2s var(--ease-spatial) both; }
+/* Ticket edges: punched half-circles down both sides. */
+.ticket {
+  --notch: radial-gradient(circle at 0 50%, transparent 10px, #000 10.5px) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent 10px, #000 10.5px) right / 51% 100% no-repeat;
+  -webkit-mask: var(--notch);
+  mask: var(--notch);
+}
+
+/* Queue tokens glide forward as the line moves. */
+.lane-token {
+  transition: transform 0.8s var(--ease-spring), opacity 0.5s;
+}
+@keyframes on-the-way {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+.on-the-way { animation: on-the-way 0.9s ease-in-out infinite; }
+
+/* The mobile tab bar floats up into place. */
+@keyframes dock-in {
+  from { transform: translateY(120%); }
+  to { transform: none; }
+}
+.dock-in { animation: dock-in 0.8s var(--ease-spring) 0.3s both; }
+
+/* ---------- Moving between pages (View Transitions) ---------- */
+
+/* Clicks pass through to the new page while a transition finishes. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* The header, the phone tab bar and the city behind everything stay put and stay live. */
+::view-transition-group(site-header),
+::view-transition-group(site-dock),
+::view-transition-group(city-backdrop),
+::view-transition-new(site-header),
+::view-transition-new(site-dock),
+::view-transition-new(city-backdrop) {
+  animation: none;
+}
+::view-transition-group(site-header),
+::view-transition-group(site-dock) {
+  z-index: 100;
+}
+::view-transition-old(site-header),
+::view-transition-old(site-dock),
+::view-transition-old(city-backdrop) {
+  display: none;
+}
+
+/* A card's title and topic travel into the item page and settle as its heading. */
+::view-transition-group(.morph) {
+  animation-duration: 620ms;
+  animation-timing-function: var(--ease-spatial);
+}
+::view-transition-image-pair(.morph) {
+  animation-name: via-blur;
+}
+@keyframes via-blur {
+  35% { filter: blur(3px); }
+}
+
+/* Any other page change: the old page sinks back into the haze, the new one comes forward. */
+::view-transition-old(.page) {
+  animation: 220ms ease-in both vt-recede;
+}
+::view-transition-new(.page) {
+  animation: 600ms var(--ease-spatial) 120ms both vt-arrive;
+}
+@keyframes vt-recede {
+  to { opacity: 0; scale: 0.96; filter: blur(8px); }
+}
+@keyframes vt-arrive {
+  from { opacity: 0; scale: 1.03; translate: 0 14px; filter: blur(8px); }
+}
+
+/* Going deeper slides left; coming back slides right. */
+::view-transition-old(.nav-forward) {
+  --slide: -80px;
+  animation: 200ms ease-in both vt-fade-out, 460ms var(--ease-spatial) both vt-slide-out;
+}
+::view-transition-new(.nav-forward) {
+  --slide: 80px;
+  animation: 300ms ease-out 140ms both vt-fade-in, 560ms var(--ease-spatial) both vt-slide-in;
+}
+::view-transition-old(.nav-back) {
+  --slide: 80px;
+  animation: 200ms ease-in both vt-fade-out, 460ms var(--ease-spatial) both vt-slide-out;
+}
+::view-transition-new(.nav-back) {
+  --slide: -80px;
+  animation: 300ms ease-out 140ms both vt-fade-in, 560ms var(--ease-spatial) both vt-slide-in;
+}
+@keyframes vt-fade-out {
+  to { opacity: 0; filter: blur(4px); }
+}
+@keyframes vt-fade-in {
+  from { opacity: 0; filter: blur(4px); }
+}
+@keyframes vt-slide-out {
+  to { translate: var(--slide); scale: 0.98; }
+}
+@keyframes vt-slide-in {
+  from { translate: var(--slide); scale: 0.98; }
+}
+
+/* First visit: the city fades up as the camera dives in. */
+@keyframes city-in {
+  from { opacity: 0; }
+}
+.city-arrive {
+  animation: city-in 1.4s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-image-pair(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+}

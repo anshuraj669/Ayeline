@@ -1,0 +1,25 @@
+# Dependencies and build output are recreated inside the image.
+node_modules
+.next
+out
+build
+coverage
+*.tsbuildinfo
+next-env.d.ts
+
+# Local data, secrets and logs never go into the image.
+.data
+.env*
+!.env.example
+*.log
+*.sql
+*.dump
+
+# Tooling and docs the server doesn't need.
+.git
+.gitignore
+.vscode
+.idea
+Dockerfile
+.dockerignore
+README.md

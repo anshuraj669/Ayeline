@@ -19,7 +19,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1 NEXT_OUTPUT=standalone
-RUN npm run build
+# Git doesn't keep empty folders, so public/ may be missing from a fresh clone.
+RUN mkdir -p public && npm run build
 
 FROM node:${NODE_VERSION}-alpine
 WORKDIR /app

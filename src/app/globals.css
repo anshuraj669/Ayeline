@@ -741,7 +741,7 @@ body {
 
 /* A card's title and topic travel into the item page and settle as its heading. */
 ::view-transition-group(.morph) {
-  animation-duration: 620ms;
+  animation-duration: 460ms;
   animation-timing-function: var(--ease-spatial);
 }
 ::view-transition-image-pair(.morph) {
@@ -751,42 +751,43 @@ body {
   35% { filter: blur(3px); }
 }
 
-/* Any other page change: the old page sinks back into the haze, the new one comes forward. */
+/* Any other page change: the old page sinks back, the new one comes forward.
+   Kept short and blur-free: blurring full-page snapshots costs frames on slower devices. */
 ::view-transition-old(.page) {
-  animation: 220ms ease-in both vt-recede;
+  animation: 140ms ease-in both vt-recede;
 }
 ::view-transition-new(.page) {
-  animation: 600ms var(--ease-spatial) 120ms both vt-arrive;
+  animation: 340ms var(--ease-spatial) 40ms both vt-arrive;
 }
 @keyframes vt-recede {
-  to { opacity: 0; scale: 0.96; filter: blur(8px); }
+  to { opacity: 0; scale: 0.98; }
 }
 @keyframes vt-arrive {
-  from { opacity: 0; scale: 1.03; translate: 0 14px; filter: blur(8px); }
+  from { opacity: 0; scale: 1.015; translate: 0 8px; }
 }
 
 /* Going deeper slides left; coming back slides right. */
 ::view-transition-old(.nav-forward) {
-  --slide: -80px;
-  animation: 200ms ease-in both vt-fade-out, 460ms var(--ease-spatial) both vt-slide-out;
+  --slide: -48px;
+  animation: 140ms ease-in both vt-fade-out, 300ms var(--ease-spatial) both vt-slide-out;
 }
 ::view-transition-new(.nav-forward) {
-  --slide: 80px;
-  animation: 300ms ease-out 140ms both vt-fade-in, 560ms var(--ease-spatial) both vt-slide-in;
+  --slide: 48px;
+  animation: 200ms ease-out 60ms both vt-fade-in, 360ms var(--ease-spatial) both vt-slide-in;
 }
 ::view-transition-old(.nav-back) {
-  --slide: 80px;
-  animation: 200ms ease-in both vt-fade-out, 460ms var(--ease-spatial) both vt-slide-out;
+  --slide: 48px;
+  animation: 140ms ease-in both vt-fade-out, 300ms var(--ease-spatial) both vt-slide-out;
 }
 ::view-transition-new(.nav-back) {
-  --slide: -80px;
-  animation: 300ms ease-out 140ms both vt-fade-in, 560ms var(--ease-spatial) both vt-slide-in;
+  --slide: -48px;
+  animation: 200ms ease-out 60ms both vt-fade-in, 360ms var(--ease-spatial) both vt-slide-in;
 }
 @keyframes vt-fade-out {
-  to { opacity: 0; filter: blur(4px); }
+  to { opacity: 0; }
 }
 @keyframes vt-fade-in {
-  from { opacity: 0; filter: blur(4px); }
+  from { opacity: 0; }
 }
 @keyframes vt-slide-out {
   to { translate: var(--slide); scale: 0.98; }
